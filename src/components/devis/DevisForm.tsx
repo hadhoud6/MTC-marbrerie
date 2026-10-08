@@ -4,6 +4,7 @@ import { useCallback, useRef, useState, type ChangeEvent, type ReactNode } from 
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useTranslations } from "next-intl";
+import GhostButton from "@/components/common/GhostButton";
 import { PRODUCT_TYPES } from "@/data/productTypes";
 import { siteConfig, getWhatsAppUrl } from "@/data/siteConfig";
 import {
@@ -171,13 +172,16 @@ export default function DevisForm({ locale }: DevisFormProps) {
               ? t(`validation.${submitState.fileError}`)
               : t(`error.codes.${submitState.code}`)}
           </p>
-          <button
-            type="button"
-            onClick={retry}
-            className="mt-4 rounded-full bg-brand-dark px-5 py-2 text-sm font-bold text-white transition hover:bg-brand-dark-alt"
-          >
-            {t("error.retry")}
-          </button>
+          <div className="mt-4">
+            <GhostButton
+              type="button"
+              variant="black"
+              size="sm"
+              onClick={retry}
+            >
+              {t("error.retry")}
+            </GhostButton>
+          </div>
           <p className="mt-4 text-sm text-text-muted">
             {t("error.fallback")}{" "}
             <a
@@ -320,19 +324,16 @@ export default function DevisForm({ locale }: DevisFormProps) {
           )}
         </Field>
 
-        <button
+        <GhostButton
           type="submit"
+          variant="black"
+          size="md"
+          isLoading={isSubmitting}
           disabled={isSubmitting}
-          className="flex w-full items-center justify-center gap-2 rounded-full bg-brand-orange px-8 py-3.5 font-bold text-brand-dark transition hover:bg-orange-400 disabled:cursor-not-allowed disabled:opacity-60 md:w-auto md:min-w-[200px]"
+          className="w-full md:w-auto md:min-w-[200px]"
         >
-          {isSubmitting && (
-            <span
-              className="inline-block h-5 w-5 animate-spin rounded-full border-2 border-brand-dark/30 border-t-brand-dark"
-              aria-hidden
-            />
-          )}
           {isSubmitting ? t("submitting") : t("submit")}
-        </button>
+        </GhostButton>
       </form>
     </div>
   );

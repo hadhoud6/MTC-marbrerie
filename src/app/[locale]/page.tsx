@@ -1,14 +1,8 @@
 import { setRequestLocale } from "next-intl/server";
 import type { Metadata } from "next";
 import { getTranslations } from "next-intl/server";
-import FadeInSection from "@/components/common/FadeInSection";
+import HomePanelManager from "@/components/home/HomePanelManager";
 import LoadingScreen from "@/components/home/LoadingScreen";
-import Hero from "@/components/home/Hero";
-import VideoShowcase from "@/components/home/VideoShowcase";
-import UsineShowcase from "@/components/home/UsineShowcase";
-import ProductsPreview from "@/components/home/ProductsPreview";
-import ConfiguratorTeaser from "@/components/home/ConfiguratorTeaser";
-import ProjetsShowcase from "@/components/home/ProjetsShowcase";
 
 type Props = {
   params: Promise<{ locale: string }>;
@@ -31,20 +25,7 @@ export default async function HomePage({ params }: Props) {
   return (
     <>
       <LoadingScreen />
-      <Hero />
-      <FadeInSection>
-        <VideoShowcase />
-      </FadeInSection>
-      <FadeInSection>
-        <UsineShowcase />
-      </FadeInSection>
-      <ProductsPreview />
-      <FadeInSection>
-        <ConfiguratorTeaser />
-      </FadeInSection>
-      <FadeInSection>
-        <ProjetsShowcase />
-      </FadeInSection>
+      <HomePanelManager />
     </>
   );
 }

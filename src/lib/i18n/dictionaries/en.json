@@ -16,14 +16,10 @@
     "devis": "Quote",
     "contact": "Contact",
     "catalogue": "Catalog",
+    "footer": "Contact & Links",
     "since": "Since {year}",
     "menuOpen": "Open menu",
     "menuClose": "Close menu"
-  },
-  "hero": {
-    "title": "Timeless Elegance in Marble",
-    "subtitle": "From quarry to your interior, we transform stone into works of art. Since 1989, Marble Tunis Carthage combines artisanal expertise and innovation to elevate your spaces.",
-    "cta": "Discover our products"
   },
   "video": {
     "title": "Our Craft in Motion",
@@ -111,8 +107,6 @@
     "description": "A network of diverse and prestigious clients around the world."
   },
   "footer": {
-    "tagline": "Tunisian marble excellence since 1989",
-    "blurb": "Founded in 1989, Marble Tunis Carthage is a leader in marble transformation in Tunisia. Our passion for stone and commitment to quality set us apart.",
     "usefulLinks": "Useful links",
     "contactUs": "Contact us",
     "copyright": "© {year} Marble Tunis Carthage. All rights reserved."

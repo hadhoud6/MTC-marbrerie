@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { useLocale, useTranslations } from "next-intl";
+import GhostButton from "@/components/common/GhostButton";
 import {
   configuratorPopupCopy,
   configuratorRooms,
@@ -114,18 +115,20 @@ function RoomCard({
             </li>
           ))}
         </ul>
-        <motion.button
-          type="button"
-          whileHover={{ scale: 1.02, backgroundColor: "#2d2d2d" }}
-          whileTap={{ scale: 0.98 }}
-          onClick={(e) => {
-            e.stopPropagation();
-            handleSelect();
-          }}
-          className="mt-6 w-full rounded-xl bg-[#1a1a1a] py-3.5 text-sm font-bold text-white transition-colors md:text-base"
-        >
-          {visualizeLabel}
-        </motion.button>
+        <div className="mt-6">
+          <GhostButton
+            variant="orange"
+            size="md"
+            rounded="xl"
+            fullWidth
+            onClick={(e) => {
+              e.stopPropagation();
+              handleSelect();
+            }}
+          >
+            {visualizeLabel}
+          </GhostButton>
+        </div>
       </div>
     </motion.article>
   );
@@ -257,15 +260,15 @@ export default function ConfiguratorPopup({
                     <p className="font-serif text-lg leading-relaxed text-white/90 md:text-xl">
                       {t("selectedMessage", { room: selectedRoomLabel })}
                     </p>
-                    <motion.button
-                      type="button"
-                      whileHover={{ scale: 1.05 }}
-                      whileTap={{ scale: 0.98 }}
-                      onClick={() => setSelectedRoom(null)}
-                      className="mt-10 inline-block rounded-full bg-[#ef5d36] px-10 py-4 text-base font-bold text-[#1a1a1a] transition hover:bg-[#f97350]"
-                    >
-                      {t("back")}
-                    </motion.button>
+                    <div className="mt-10">
+                      <GhostButton
+                        variant="orange"
+                        size="lg"
+                        onClick={() => setSelectedRoom(null)}
+                      >
+                        {t("back")}
+                      </GhostButton>
+                    </div>
                   </motion.div>
                 )}
               </AnimatePresence>

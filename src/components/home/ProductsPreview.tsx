@@ -1,64 +1,108 @@
 "use client";
 
 import { useState } from "react";
+import Image from "next/image";
 import { motion } from "framer-motion";
 import { useTranslations } from "next-intl";
 import FadeInSection from "@/components/common/FadeInSection";
+import { TextEffect } from "@/components/core/text-effect";
+import GhostButton from "@/components/common/GhostButton";
 import { siteConfig } from "@/data/siteConfig";
 import ProductsCataloguePopup from "./ProductsCataloguePopup";
 
-export default function ProductsPreview() {
+interface ProductsPreviewProps {
+  isActive?: boolean;
+}
+
+export default function ProductsPreview({ isActive = true }: ProductsPreviewProps) {
   const t = useTranslations("products");
   const [catalogueOpen, setCatalogueOpen] = useState(false);
+  const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
   const bgUrl = siteConfig.assets.productsSectionBackground;
+
+  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    const { clientX, clientY, currentTarget } = e;
+    const rect = currentTarget.getBoundingClientRect();
+    const x = (clientX - rect.left) / rect.width - 0.5;
+    const y = (clientY - rect.top) / rect.height - 0.5;
+    setMousePos({ x, y });
+  };
 
   return (
     <>
-      <FadeInSection>
-      <section
-        id="produits"
-        className="relative overflow-hidden py-24 max-md:py-16 max-[480px]:py-12"
+      <div
+        onMouseMove={handleMouseMove}
+        className="relative flex h-full min-h-[100dvh] w-full items-center justify-center overflow-hidden px-4 py-8 text-center"
       >
-        <div
-          className="absolute inset-0 -z-20 bg-cover bg-center bg-scroll md:bg-fixed"
-          style={{ backgroundImage: `url(${bgUrl})` }}
+        {/* Parallax Background with Mouse Tracking & Subtle Scaling */}
+        <motion.div
+          className="absolute inset-0"
+          animate={{
+            x: mousePos.x * -25,
+            y: mousePos.y * -25,
+            scale: isActive ? 1.06 : 1,
+          }}
+          transition={{
+            x: { type: "spring", stiffness: 100, damping: 20 },
+            y: { type: "spring", stiffness: 100, damping: 20 },
+            scale: { duration: 1.2, ease: "easeOut" },
+          }}
           aria-hidden
-        />
+        >
+          <Image
+            src={bgUrl}
+            alt=""
+            fill
+            className="object-cover"
+            sizes="100vw"
+          />
+        </motion.div>
 
         <div
-          className="absolute inset-0 -z-10"
+          className="absolute inset-0 pointer-events-none"
           style={{
             background:
-              "linear-gradient(135deg, rgba(0, 0, 0, 0.7) 0%, rgba(0, 0, 0, 0.5) 50%, rgba(0, 0, 0, 0.7) 100%)",
+              "linear-gradient(135deg, rgba(0, 0, 0, 0.72) 0%, rgba(0, 0, 0, 0.52) 50%, rgba(0, 0, 0, 0.72) 100%)",
           }}
           aria-hidden
         />
 
-        <div className="relative z-10 mx-auto max-w-7xl px-4 text-center lg:px-8">
-          <h2
-            className="mb-6 font-display text-5xl font-bold text-white max-md:text-4xl max-[480px]:text-3xl"
-            style={{ textShadow: "0 4px 6px rgba(0, 0, 0, 0.3)" }}
-          >
-            {t("title")}
-          </h2>
-          <p
-            className="mx-auto mb-8 max-w-3xl text-lg leading-relaxed text-white max-md:mb-8 max-md:text-base max-[480px]:mb-8 max-[480px]:text-[0.9rem] md:mb-12"
-            style={{ textShadow: "0 2px 4px rgba(0, 0, 0, 0.3)" }}
-          >
-            {t("description")}
-          </p>
-          <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.98 }} className="mt-10 inline-block">
-            <button
-              type="button"
-              onClick={() => setCatalogueOpen(true)}
-              className="inline-block rounded-full bg-brand-dark px-10 py-4 text-base font-bold text-white ring-2 ring-white/20 transition hover:bg-brand-orange hover:text-brand-dark"
+        <div className="relative z-10 mx-auto max-w-5xl px-4 lg:px-8">
+          <FadeInSection trigger={isActive} delay={0.1}>
+            <TextEffect
+              per="word"
+              as="h2"
+              preset="slide"
+              trigger={isActive}
+              className="mb-6 font-display text-4xl font-bold text-white max-md:text-3xl max-[480px]:text-2xl sm:text-5xl"
+              style={{ textShadow: "0 4px 6px rgba(0, 0, 0, 0.3)" }}
             >
-              {t("viewAll")}
-            </button>
-          </motion.div>
+              {t("title")}
+            </TextEffect>
+          </FadeInSection>
+
+          <FadeInSection trigger={isActive} delay={0.25}>
+            <p
+              className="mx-auto mb-8 max-w-3xl text-base sm:text-lg leading-relaxed text-white/90 md:mb-10"
+              style={{ textShadow: "0 2px 4px rgba(0, 0, 0, 0.3)" }}
+            >
+              {t("description")}
+            </p>
+          </FadeInSection>
+
+          <FadeInSection trigger={isActive} delay={0.4}>
+            <div className="inline-block">
+              <GhostButton
+                variant="orange"
+                size="lg"
+                onClick={() => setCatalogueOpen(true)}
+              >
+                {t("viewAll")}
+              </GhostButton>
+            </div>
+          </FadeInSection>
         </div>
-      </section>
-      </FadeInSection>
+      </div>
 
       <ProductsCataloguePopup open={catalogueOpen} onClose={() => setCatalogueOpen(false)} />
     </>

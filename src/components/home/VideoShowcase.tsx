@@ -34,7 +34,11 @@ declare global {
   }
 }
 
-export default function VideoShowcase() {
+interface VideoShowcaseProps {
+  isActive?: boolean;
+}
+
+export default function VideoShowcase({ isActive }: VideoShowcaseProps) {
   const t = useTranslations("video");
   const videoContainerRef = useRef<HTMLDivElement>(null);
   const playerContainerRef = useRef<HTMLDivElement>(null);
@@ -92,6 +96,10 @@ export default function VideoShowcase() {
       });
     };
 
+    if (typeof isActive === "boolean") {
+      isInViewRef.current = isActive;
+    }
+
     if (window.YT?.Player) {
       initPlayer();
     } else {
@@ -114,9 +122,20 @@ export default function VideoShowcase() {
       playerRef.current?.destroy();
       playerRef.current = null;
     };
-  }, [applyPlayback]);
+  }, [applyPlayback, isActive]);
 
+  // Respond immediately when isActive prop changes
   useEffect(() => {
+    if (typeof isActive === "boolean") {
+      isInViewRef.current = isActive;
+      applyPlayback(isActive);
+    }
+  }, [isActive, applyPlayback]);
+
+  // Fallback observer if isActive prop is not provided (standalone mode)
+  useEffect(() => {
+    if (typeof isActive === "boolean") return;
+
     const container = videoContainerRef.current;
     if (!container) return;
 
@@ -133,7 +152,7 @@ export default function VideoShowcase() {
 
     observer.observe(container);
     return () => observer.disconnect();
-  }, [applyPlayback]);
+  }, [isActive, applyPlayback]);
 
   const toggleMute = () => {
     const player = playerRef.current;
@@ -149,15 +168,18 @@ export default function VideoShowcase() {
   };
 
   return (
-    <section className="w-full bg-white py-10 md:py-14">
-      <div className="mx-auto w-full px-4 md:w-[65%] md:px-0">
-        <div ref={videoContainerRef} className="relative aspect-video w-full overflow-hidden bg-black">
+    <div className="flex h-full min-h-[100dvh] w-full items-center justify-center bg-white px-4 py-8 sm:px-6 md:px-8">
+      <div className="mx-auto w-full max-w-5xl">
+        <div
+          ref={videoContainerRef}
+          className="relative aspect-video w-full overflow-hidden rounded-2xl bg-black shadow-2xl ring-1 ring-black/10"
+        >
           <div ref={playerContainerRef} className="absolute inset-0 h-full w-full" />
 
           <button
             type="button"
             onClick={toggleMute}
-            className="absolute right-4 bottom-4 z-10 flex h-12 w-12 items-center justify-center rounded-full bg-black/55 text-white ring-1 ring-white/25 backdrop-blur-sm transition hover:bg-black/75"
+            className="absolute right-4 bottom-4 z-10 flex h-12 w-12 items-center justify-center rounded-full bg-black/55 text-white ring-1 ring-white/25 backdrop-blur-sm transition hover:bg-black/75 cursor-pointer"
             aria-label={isMuted ? t("unmute") : t("mute")}
           >
             {isMuted ? (
@@ -172,6 +194,6 @@ export default function VideoShowcase() {
           </button>
         </div>
       </div>
-    </section>
+    </div>
   );
 }

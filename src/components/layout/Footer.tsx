@@ -1,5 +1,7 @@
+"use client";
+
 import Image from "next/image";
-import { getTranslations } from "next-intl/server";
+import { useTranslations } from "next-intl";
 import { Link } from "@/lib/i18n/routing";
 import { siteConfig } from "@/data/siteConfig";
 
@@ -19,13 +21,13 @@ const socialItems = [
   { key: "linkedin", href: siteConfig.social.linkedin },
 ] as const;
 
-export default async function Footer() {
-  const tNav = await getTranslations("nav");
-  const tFooter = await getTranslations("footer");
-  const tSocial = await getTranslations("social");
+export default function Footer({ className = "" }: { className?: string }) {
+  const tNav = useTranslations("nav");
+  const tFooter = useTranslations("footer");
+  const tSocial = useTranslations("social");
 
   return (
-    <footer className="bg-brand-dark text-white">
+    <footer className={`border-t border-stone-200 bg-white text-black ${className}`}>
       <div className="mx-auto grid max-w-7xl gap-10 px-4 py-16 md:grid-cols-2 lg:grid-cols-3 lg:px-8">
         <div>
           <div className="mb-4 flex items-center gap-3">
@@ -35,26 +37,24 @@ export default async function Footer() {
               alt={siteConfig.name}
               width={56}
               height={56}
-              className="h-14 w-auto brightness-0 invert"
+              className="h-14 w-auto"
             />
             <div>
-              <p className="flex flex-wrap items-baseline gap-x-2 font-display text-sm font-bold tracking-widest text-brand-orange">
+              <p className="flex flex-wrap items-baseline gap-x-2 font-display text-sm font-bold tracking-widest text-black">
                 <span>MARBRERIE TUNIS CARTHAGE</span>
-                <span className="text-[0.85em] font-semibold tracking-wide">
+                <span className="text-[0.85em] font-semibold tracking-wide text-black">
                   Since 1989
                 </span>
               </p>
-              <p className="font-arabic text-sm text-white/70" dir="rtl">
+              <p className="font-arabic text-sm text-black/75" dir="rtl">
                 {siteConfig.nameArabic}
               </p>
             </div>
           </div>
-          <p className="mb-2 text-brand-orange">{tFooter("tagline")}</p>
-          <p className="text-sm leading-relaxed text-white/70">{tFooter("blurb")}</p>
         </div>
 
         <div>
-          <h3 className="mb-4 font-display text-lg font-bold text-brand-orange">
+          <h3 className="mb-4 font-display text-lg font-bold text-black">
             {tFooter("usefulLinks")}
           </h3>
           <ul className="space-y-2">
@@ -62,7 +62,7 @@ export default async function Footer() {
               <li key={link.key}>
                 <Link
                   href={link.href}
-                  className="text-sm text-white/80 transition hover:text-brand-orange"
+                  className="text-sm text-stone-600 transition hover:text-black"
                 >
                   {tNav(link.key)}
                 </Link>
@@ -72,23 +72,29 @@ export default async function Footer() {
         </div>
 
         <div>
-          <h3 className="mb-4 font-display text-lg font-bold text-brand-orange">
+          <h3 className="mb-4 font-display text-lg font-bold text-black">
             {tFooter("contactUs")}
           </h3>
-          <ul className="space-y-2 text-sm text-white/80">
+          <ul className="space-y-2 text-sm text-stone-600">
             <li>
-              <a href={`tel:${siteConfig.phone.replace(/\s/g, "")}`} className="hover:text-brand-orange">
+              <a
+                href={`tel:${siteConfig.phone.replace(/\s/g, "")}`}
+                className="transition hover:text-black"
+              >
                 {siteConfig.phone}
               </a>
             </li>
             <li>
-              <a href={`mailto:${siteConfig.email}`} className="hover:text-brand-orange">
+              <a
+                href={`mailto:${siteConfig.email}`}
+                className="transition hover:text-black"
+              >
                 {siteConfig.email}
               </a>
             </li>
             <li>{siteConfig.address}</li>
           </ul>
-          <div className="mt-4 overflow-hidden rounded-lg">
+          <div className="mt-4 overflow-hidden rounded-lg border border-stone-200">
             {/* SWAP: Replace embed URL with precise factory location */}
             <iframe
               src={siteConfig.assets.googleMapsEmbedUrl}
@@ -101,7 +107,7 @@ export default async function Footer() {
         </div>
       </div>
 
-      <div className="border-t border-white/10">
+      <div className="border-t border-stone-200">
         <div className="mx-auto flex max-w-7xl flex-col items-center justify-between gap-4 px-4 py-6 md:flex-row lg:px-8">
           <div className="flex gap-4">
             {socialItems.map(({ key, href }) => (
@@ -111,13 +117,13 @@ export default async function Footer() {
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label={tSocial(key)}
-                className="text-sm text-white/70 transition hover:text-brand-orange"
+                className="text-sm text-stone-600 transition hover:text-black"
               >
                 {tSocial(key)}
               </a>
             ))}
           </div>
-          <p className="text-center text-xs text-white/50">
+          <p className="text-center text-xs text-stone-500">
             {tFooter("copyright", { year: new Date().getFullYear() })}
           </p>
         </div>

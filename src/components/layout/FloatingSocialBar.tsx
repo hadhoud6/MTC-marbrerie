@@ -11,13 +11,38 @@ const socialLinks = [
   { key: "youtube", href: siteConfig.social.youtube, icon: YoutubeIcon },
 ] as const;
 
+import { usePathname } from "next/navigation";
+
 export default function FloatingSocialBar() {
   const t = useTranslations("social");
+  const pathname = usePathname();
+  const isHomePage =
+    !pathname ||
+    pathname === "/" ||
+    pathname === "/fr" ||
+    pathname === "/en" ||
+    pathname === "/fr/" ||
+    pathname === "/en/";
+
   const [visible, setVisible] = useState(false);
 
   useEffect(() => {
+    if (isHomePage) {
+      const onPanelChange = (e: Event) => {
+        const customEvent = e as CustomEvent<{ index: number }>;
+        if (customEvent.detail) {
+          setVisible(customEvent.detail.index > 0);
+        }
+      };
+      window.addEventListener("mtc-panel-change", onPanelChange);
+      return () => window.removeEventListener("mtc-panel-change", onPanelChange);
+    }
+
     const hero = document.getElementById("accueil");
-    if (!hero) return;
+    if (!hero) {
+      setVisible(true);
+      return;
+    }
 
     const observer = new IntersectionObserver(
       ([entry]) => setVisible(!entry.isIntersecting),
@@ -25,18 +50,28 @@ export default function FloatingSocialBar() {
     );
     observer.observe(hero);
     return () => observer.disconnect();
-  }, []);
+  }, [isHomePage]);
 
   const scrollToTop = () => {
-    window.scrollTo({ top: 0, behavior: "smooth" });
+    if (isHomePage) {
+      window.dispatchEvent(
+        new CustomEvent("mtc-goto-panel", { detail: { index: 0, id: "accueil" } }),
+      );
+    } else {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
   };
 
   return (
     <motion.aside
-      initial={{ opacity: 0, x: 20 }}
-      animate={{ opacity: visible ? 1 : 0, x: visible ? 0 : 20 }}
+      initial={{ opacity: 0, x: isHomePage ? -20 : 20 }}
+      animate={{ opacity: visible ? 1 : 0, x: visible ? 0 : isHomePage ? -20 : 20 }}
       transition={{ duration: 0.4 }}
-      className={`fixed right-3 top-1/2 z-40 hidden -translate-y-1/2 flex-col gap-2 md:flex ${visible ? "pointer-events-auto" : "pointer-events-none"}`}
+      className={`fixed ${
+        isHomePage ? "left-3 md:left-6" : "right-3 md:right-6"
+      } top-1/2 z-40 hidden -translate-y-1/2 flex-col gap-2 md:flex ${
+        visible ? "pointer-events-auto" : "pointer-events-none"
+      }`}
       aria-hidden={!visible}
     >
       {socialLinks.map(({ key, href, icon: Icon }) => (

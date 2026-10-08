@@ -1,6 +1,6 @@
-import Link from "next/link";
 import { getTranslations } from "next-intl/server";
 import { MapPin, Phone, Mail, ArrowUpRight, MessageCircle } from "lucide-react";
+import GhostButton from "@/components/common/GhostButton";
 import { siteConfig, getWhatsAppUrl } from "@/data/siteConfig";
 
 type CoordonneesSectionProps = {
@@ -91,23 +91,25 @@ export default async function CoordonneesSection({
 
         {/* Action Buttons */}
         <div className="flex flex-wrap items-center justify-center gap-4">
-          <Link
+          <GhostButton
             href={`/${locale}/contact`}
-            className="inline-flex items-center justify-center gap-2 px-8 py-3.5 rounded-full bg-brand-dark text-white text-xs sm:text-sm uppercase tracking-[0.2em] font-medium hover:bg-brand-orange transition-colors duration-300 shadow-xs"
+            variant="black"
+            size="md"
           >
             <span>{t("ctaContact")}</span>
             <ArrowUpRight className="w-4 h-4" />
-          </Link>
+          </GhostButton>
 
-          <a
+          <GhostButton
             href={whatsappUrl}
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center justify-center gap-2 px-7 py-3.5 rounded-full bg-white border border-black/[0.1] text-brand-dark text-xs sm:text-sm uppercase tracking-[0.2em] font-medium hover:border-brand-orange hover:text-brand-orange hover:bg-neutral-50 transition-all duration-300"
+            variant="black"
+            size="md"
           >
             <MessageCircle className="w-4 h-4 text-emerald-600" />
             <span>{t("ctaWhatsApp")}</span>
-          </a>
+          </GhostButton>
         </div>
       </div>
     </section>

@@ -14,6 +14,7 @@ import {
   RotateCcw,
 } from "lucide-react";
 import { useTranslations } from "next-intl";
+import GhostButton from "@/components/common/GhostButton";
 
 type FlipBookControlsProps = {
   currentPage: number;
@@ -194,18 +195,21 @@ export default function FlipBookControls({
           </button>
 
           {/* Direct Download Button */}
-          <a
+          <GhostButton
             href="/catalogue.pdf"
             download="Catalogue-Marbrerie-Tunis-Carthage.pdf"
             target="_blank"
             rel="noopener noreferrer"
             title={t("downloadPdf")}
             aria-label={t("downloadPdf")}
-            className="flex items-center gap-1.5 px-3 py-2 sm:px-3.5 sm:py-2.5 rounded-xl bg-brand-dark hover:bg-brand-orange text-white text-xs sm:text-sm font-medium transition-all duration-200 shadow-sm active:scale-95"
+            variant="black"
+            size="sm"
+            rounded="xl"
+            className="px-3 py-2 sm:px-3.5 sm:py-2.5"
           >
             <Download className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
             <span className="hidden sm:inline">{t("downloadPdf")}</span>
-          </a>
+          </GhostButton>
         </div>
       </div>
     </div>

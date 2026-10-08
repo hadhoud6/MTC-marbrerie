@@ -270,11 +270,10 @@ export default function FlipBook({ pdfUrl = "/catalogue.pdf" }: FlipBookProps) {
   return (
     <div
       ref={containerRef}
-      className={`w-full flex flex-col items-center justify-center transition-colors duration-300 ${
-        isFullscreen
+      className={`w-full flex flex-col items-center justify-center transition-colors duration-300 ${isFullscreen
           ? "fixed inset-0 z-50 bg-brand-dark/95 backdrop-blur-xl p-4 sm:p-8 overflow-y-auto"
           : "relative my-4"
-      }`}
+        }`}
     >
       {/* Main Flipbook Showcase */}
       {isLoading ? (

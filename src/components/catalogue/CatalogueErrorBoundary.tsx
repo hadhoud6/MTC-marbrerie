@@ -3,6 +3,8 @@
 import React, { Component, type ErrorInfo, type ReactNode } from "react";
 import { BookOpen, Download, RotateCcw } from "lucide-react";
 
+import GhostButton from "@/components/common/GhostButton";
+
 interface Props {
   children: ReactNode;
   pdfUrl?: string;
@@ -46,24 +48,28 @@ export default class CatalogueErrorBoundary extends Component<Props, State> {
             Le catalogue est disponible en consultation directe ou en téléchargement haute définition.
           </p>
           <div className="flex flex-wrap items-center justify-center gap-3">
-            <button
+            <GhostButton
               type="button"
+              variant="black"
+              size="sm"
+              rounded="xl"
               onClick={this.handleRetry}
-              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl border border-neutral-300 text-neutral-700 text-sm font-medium hover:bg-neutral-50 transition-colors cursor-pointer"
             >
               <RotateCcw className="w-4 h-4" />
               Réessayer
-            </button>
-            <a
+            </GhostButton>
+            <GhostButton
               href={pdfUrl}
               download="Catalogue-Marbrerie-Tunis-Carthage.pdf"
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-brand-orange text-brand-dark text-sm font-bold hover:bg-orange-400 shadow-md transition-colors"
+              variant="black"
+              size="sm"
+              rounded="xl"
             >
               <Download className="w-4 h-4" />
               Télécharger le PDF
-            </a>
+            </GhostButton>
           </div>
         </div>
       );
